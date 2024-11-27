@@ -1,0 +1,6 @@
+{
+    "BANNER": "TikTok Live Recorder\nVersion 5.3\n",
+    "cookies_path": "src/cookies.json",
+    "default_mode": "manual",
+    "proxy_example": "http://127.0.0.1:8080"
+}
