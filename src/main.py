@@ -31,6 +31,14 @@ class TikTokLiveRecorder:
         with open(config_path, 'r') as f:
             return json.load(f)
 
+    def read_cookies(self):
+        """
+        Loads the cookies file and returns it.
+        """
+        cookies_path = self.config.get("cookies_path", "src/cookies.json")
+        with open(cookies_path, 'r') as f:
+            return json.load(f)
+
     def parse_args(self):
         """
         Parse command line arguments.
@@ -69,7 +77,7 @@ class TikTokLiveRecorder:
                 "[manual] => Manual live recording.\n"
                 "[automatic] => Automatic live recording when the user is live."
             ),
-            default="manual",
+            default=self.config.get("default_mode", "manual"),
             action='store'
         )
 
@@ -78,7 +86,7 @@ class TikTokLiveRecorder:
             dest="proxy",
             help=(
                 "Use HTTP proxy to bypass login restrictions in some countries.\n"
-                "Example: -proxy http://127.0.0.1:8080"
+                f"Example: -proxy {self.config.get('proxy_example', 'http://127.0.0.1:8080')}"
             ),
             action='store'
         )
@@ -159,7 +167,7 @@ class TikTokLiveRecorder:
                 raise ArgsParseError("To use automatic mode, add -ffmpeg flag.")
 
             # read cookies from file
-            cookies = self.config.get('cookies', {})
+            cookies = self.read_cookies()
 
             TikTok(
                 httpclient=HttpClient(self.logger, cookies=cookies, proxy=args.proxy),
